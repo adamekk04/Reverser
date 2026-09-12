@@ -6,6 +6,7 @@ import net.minecraft.world.level.levelgen.DensityFunction;
 import net.minecraft.world.level.levelgen.RandomState;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
+import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -140,7 +141,8 @@ public final class Reverser extends JavaPlugin {
     }
 
     private RandomState makeNMSWorld(World world) {
-        ServerLevel serverLevel = (ServerLevel) world;
+        CraftWorld craftWorld = (CraftWorld) world;
+        ServerLevel serverLevel = craftWorld.getHandle();
         return serverLevel.getChunkSource().randomState();
     }
 }

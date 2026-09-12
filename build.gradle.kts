@@ -2,6 +2,7 @@ plugins {
     id("java-library")
     alias(libs.plugins.shadow)
     alias(libs.plugins.run.paper)
+    alias(libs.plugins.paperweight.userdev)
 }
 
 repositories {
@@ -10,11 +11,16 @@ repositories {
 }
 
 dependencies {
-    compileOnly(libs.paper.api)
+    paperweight.paperDevBundle("26.2.build.+")
 }
 
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(25)
+}
+
+paperweight {
+    reobfArtifactConfiguration =
+        io.papermc.paperweight.userdev.ReobfArtifactConfiguration.MOJANG_PRODUCTION
 }
 
 tasks {

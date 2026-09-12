@@ -12,6 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Random;
 import java.util.logging.Level;
 
 public final class Reverser extends JavaPlugin {
@@ -24,9 +25,11 @@ public final class Reverser extends JavaPlugin {
         try {
             seed = Long.parseLong(seedFromArg);
         } catch (NumberFormatException e) {
-            throw new RuntimeException(e);
+            getLogger().log(Level.SEVERE, "Invalid seed: " + seedFromArg + ", using ranodm one");
+            Random random = new Random();
+            seed = random.nextLong();
         }
-        getLogger().info("Fetched seed " + seed);
+        getLogger().info("Fetched seed: " + seed);
 
         // Creating data folder
         getLogger().info(getDataFolder().mkdir() ? "Created data folder." : "Unable to create data folder.");

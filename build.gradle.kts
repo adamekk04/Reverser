@@ -1,6 +1,5 @@
 plugins {
     id("java-library")
-    alias(libs.plugins.shadow)
     alias(libs.plugins.run.paper)
     alias(libs.plugins.paperweight.userdev)
 }
@@ -24,10 +23,6 @@ paperweight {
 }
 
 tasks {
-    build {
-        dependsOn(shadowJar)
-    }
-
     runServer {
         minecraftVersion(libs.versions.minecraft.get())
         jvmArgs("-Xms2G", "-Xmx2G")

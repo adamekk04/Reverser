@@ -56,54 +56,46 @@ public final class Reverser extends JavaPlugin {
         World world = worldCreator.createWorld();
         getLogger().info("Created world");
 
-        for (int x = -100; x < 100; x++) {
-            for (int z = -100; z < 100; z++) {
-                for (int y = -64; y < 320; y++) {
-                    String fwPrefix = x + ";" + y + ";" + z;
+        try (
+                FileWriter temperatureFW = new FileWriter(temperature);
+                FileWriter humidityFW = new FileWriter(humidity)
+        ) {
+            for (int x = -100; x < 100; x++) {
+                for (int z = -100; z < 100; z++) {
+                    for (int y = -64; y < 320; y++) {
+                        String prefix = x + ";" + y + ";" + z + ";";
 
-                    try {
-                        FileWriter temperatureFW = new FileWriter(temperature);
-                        FileWriter humidityFW = new FileWriter(humidity);
-
-                        temperatureFW.write(fwPrefix + world.getTemperature(x, y, z));
-                        humidityFW.write(fwPrefix + world.getHumidity(x, y, z));
-
-                        temperatureFW.close();
-                        humidityFW.close();
-                    } catch (IOException e) {
-                        getLogger().log(Level.SEVERE, "Something went wrong while writing into files.", e);
+                        temperatureFW.write(prefix + world.getTemperature(x, y, z) + "\n");
+                        humidityFW.write(prefix + world.getHumidity(x, y, z) + "\n");
                     }
                 }
             }
+        } catch (IOException e) {
+            getLogger().log(Level.SEVERE, "Something went wrong while writing into files.", e);
         }
         getLogger().info("Finished writing temperature and humidity.");
 
         // Fetching continentness, erosion, weirdness and depth by accessing NMS
-        for (int x = -100; x < 100; x++) {
-            for (int z = -100; z < 100; z++) {
-                for (int y = -64; y < 320; y++) {
-                    try {
-                        String fwPrefix = x + ";" + y + ";" + z;
+        try (
+                FileWriter continentnessFW = new FileWriter(continentness);
+                FileWriter erosionFW = new FileWriter(erosion);
+                FileWriter weirdnessFW = new FileWriter(weirdness);
+                FileWriter depthFW = new FileWriter(depth)
+        ) {
+            for (int x = -100; x < 100; x++) {
+                for (int z = -100; z < 100; z++) {
+                    for (int y = -64; y < 320; y++) {
+                        String prefix = x + ";" + y + ";" + z + ";";
 
-                        FileWriter continentnessFW = new FileWriter(continentness);
-                        FileWriter erosionFW = new FileWriter(erosion);
-                        FileWriter weirdnessFW = new FileWriter(weirdness);
-                        FileWriter depthFW = new FileWriter(depth);
-
-                        continentnessFW.write(fwPrefix + getContinentness(x, y, z, world));
-                        erosionFW.write(fwPrefix + getErosion(x, y, z, world));
-                        weirdnessFW.write(fwPrefix + getWeirdness(x, y, z, world));
-                        depthFW.write(fwPrefix + getDepth(x, y, z, world));
-
-                        continentnessFW.close();
-                        erosionFW.close();
-                        weirdnessFW.close();
-                        depthFW.close();
-                    } catch (IOException e) {
-                        getLogger().log(Level.SEVERE, "Something went wrong while writing into files.", e);
+                        continentnessFW.write(prefix + getContinentness(x, y, z, world) + "\n");
+                        erosionFW.write(prefix + getErosion(x, y, z, world) + "\n");
+                        weirdnessFW.write(prefix + getWeirdness(x, y, z, world) + "\n");
+                        depthFW.write(prefix + getDepth(x, y, z, world) + "\n");
                     }
                 }
             }
+        } catch (IOException e) {
+            getLogger().log(Level.SEVERE,"Something went wrong while writing into files.",  e);
         }
         getLogger().info("Finished writing continentness, erosion, weirdness and depth.");
 

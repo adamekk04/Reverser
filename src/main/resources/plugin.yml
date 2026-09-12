@@ -1,0 +1,9 @@
+name: Reverser
+version: '${version}'
+
+main: org.reverser.Reverser
+bootstrapper: org.reverser.ReverserBootstrap
+api-version: '26.2'
+load: POSTWORLD
+
+authors: [ adamekk04 ]

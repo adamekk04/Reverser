@@ -77,15 +77,19 @@ public final class Reverser extends JavaPlugin {
 
             for (int x = -100; x < 100; x++) {
                 for (int z = -100; z < 100; z++) {
+                    String prefix = x + ";" + z + ";";
+                    DensityFunction.FunctionContext context = new DensityFunction.SinglePointContext(x, 0, z);
+
+                    humidityFW.write(prefix + sampler.humidity().compute(context) + "\n");
+                    continentnessFW.write(prefix + sampler.temperature().compute(context) + "\n");
+                    erosionFW.write(prefix + sampler.erosion().compute(context) + "\n");
+                    weirdnessFW.write(prefix + sampler.weirdness().compute(context) + "\n");
+
                     for (int y = -64; y < 320; y++) {
-                        String prefix = x + ";" + y + ";" + z + ";";
-                        DensityFunction.FunctionContext context = new DensityFunction.SinglePointContext(x, y, z);
+                        prefix = x + ";" + y + ";" + z + ";";
+                        context = new DensityFunction.SinglePointContext(x, y, z);
 
                         temperatureFW.write(prefix + sampler.temperature().compute(context) + "\n");
-                        humidityFW.write(prefix + sampler.humidity().compute(context) + "\n");
-                        continentnessFW.write(prefix + sampler.continentalness().compute(context) + "\n");
-                        erosionFW.write(prefix + sampler.erosion().compute(context) + "\n");
-                        weirdnessFW.write(prefix + sampler.weirdness().compute(context) + "\n");
                         depthFW.write(prefix + sampler.depth().compute(context) + "\n");
                     }
                 }
@@ -93,8 +97,6 @@ public final class Reverser extends JavaPlugin {
         } catch (IOException e) {
             getLogger().log(Level.SEVERE,"Something went wrong while writing into files.",  e);
         }
-        getLogger().info("Finished writing continentness, erosion, weirdness and depth.");
-
         getLogger().info("FINISHED EVERYTHING");
     }
 

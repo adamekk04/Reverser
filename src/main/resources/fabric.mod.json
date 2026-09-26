@@ -3,11 +3,10 @@
   "id": "reverser",
   "version": "${version}",
   "name": "Reverser",
-  "description": "Fabric mod for reverse-engeneering Minecraft's world generation process",
+  "description": "Fabric mod for reverse-engineering Minecraft's world generation process",
   "authors": [],
   "contact": {},
   "license": "MIT",
-  "icon": "assets/reverser/icon.png",
   "environment": "server",
   "entrypoints": {
     "main": [
@@ -19,7 +18,6 @@
   ],
   "depends": {
     "fabricloader": ">=${loader_version}",
-    "fabric-language-kotlin": ">=${kotlin_loader_version}",
     "fabric-api": "*",
     "minecraft": "${minecraft_version}"
   }

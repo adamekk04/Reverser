@@ -15,6 +15,7 @@ base {
 }
 
 val targetJavaVersion = 25
+
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
     // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
@@ -22,8 +23,6 @@ java {
     // If you remove this line, sources will not be generated.
     withSourcesJar()
 }
-
-
 
 repositories {
     // Add repositories to retrieve artifacts from in here.
@@ -34,11 +33,24 @@ repositories {
 }
 
 dependencies {
-    // To change the versions see the gradle.properties file
+    // Minecraft
     minecraft("com.mojang:minecraft:${project.property("minecraft_version")}")
-    implementation("net.fabricmc:fabric-loader:${project.property("loader_version")}")
-    implementation("net.fabricmc:fabric-language-kotlin:${project.property("kotlin_loader_version")}")
 
+    // Fabric Loader
+    implementation("net.fabricmc:fabric-loader:${project.property("loader_version")}")
+
+    // Kotlin runtime.
+    //
+    // This is NOT Fabric Language Kotlin.
+    // It is the normal Kotlin standard library used by Kotlin code.
+    implementation(kotlin("stdlib"))
+
+    // Put Kotlin stdlib inside the final mod JAR as a nested JAR.
+    //
+    // This means users do not need to install Kotlin separately.
+    include(kotlin("stdlib"))
+
+    // Fabric API
     implementation("net.fabricmc.fabric-api:fabric-api:${project.property("fabric_version")}")
 }
 
@@ -46,14 +58,14 @@ tasks.processResources {
     inputs.property("version", project.version)
     inputs.property("minecraft_version", project.property("minecraft_version"))
     inputs.property("loader_version", project.property("loader_version"))
+
     filteringCharset = "UTF-8"
 
     filesMatching("fabric.mod.json") {
         expand(
             "version" to project.version,
             "minecraft_version" to project.property("minecraft_version").toString(),
-            "loader_version" to project.property("loader_version").toString(),
-            "kotlin_loader_version" to project.property("kotlin_loader_version").toString()
+            "loader_version" to project.property("loader_version").toString()
         )
     }
 }

@@ -44,14 +44,12 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         run: ls -lah build/libs/
 
-      - name: Upload JARs
+      - name: Upload JAR
         if: startsWith(github.ref, 'refs/tags/')
         uses: actions/upload-artifact@v7
         with:
-          name: reverser-jars
-          path: |
-            build/libs/Reverser-${{ github.ref_name }}.jar
-            build/libs/Reverser-${{ github.ref_name }}-sources.jar
+          name: reverser-jar
+          path: build/libs/Reverser-${{ github.ref_name }}.jar
           if-no-files-found: error
 
   release:
@@ -64,13 +62,13 @@ jobs:
       contents: write
 
     steps:
-      - name: Download JARs
+      - name: Download JAR
         uses: actions/download-artifact@v7
         with:
-          name: reverser-jars
+          name: reverser-jar
           path: build/libs
 
-      - name: Show downloaded JARs
+      - name: Show downloaded JAR
         run: ls -lah build/libs/
 
       - name: Create GitHub Release
@@ -79,6 +77,4 @@ jobs:
           tag_name: ${{ github.ref_name }}
           name: Release ${{ github.ref_name }}
           generate_release_notes: true
-          files: |
-            build/libs/Reverser-${{ github.ref_name }}.jar
-            build/libs/Reverser-${{ github.ref_name }}-sources.jar
+          files: build/libs/Reverser-${{ github.ref_name }}.jar

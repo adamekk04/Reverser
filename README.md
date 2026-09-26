@@ -6,7 +6,13 @@ Reverser is a Minecraft Fabric mod that is made to help reverse engineer world g
 ## Versions
 | Mc Version | Include Snapshots | Mod version |
 |-|-|-|
-| 26.3 | No | 0.1 |
+| 26.3 | No | 0.1.2 |
+
+## Tools needed
+You need:
+- Minecraft of version above with the right version of the mod
+- Fabric loader (newest version is recommended)
+- Fabric API (newest version is recommended)
 
 ## Building from source
 1. Clone this repository

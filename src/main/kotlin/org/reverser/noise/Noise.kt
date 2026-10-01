@@ -69,6 +69,20 @@ object Noise {
         return outFile
     }
 
+    fun createSampler(
+        server: MinecraftServer,
+        dimensionKey: ResourceKey<Level>,
+        seed: Long,
+        type: NoiseType
+    ): ((Int, Int, Int) -> Float)? {
+        val worldCreator = WorldCreator.create(server, dimensionKey, seed) ?: return null
+        val function = pickFunction(worldCreator.router, type)
+
+        return { x, y, z ->
+            worldCreator.randomState.sampleBlockValueUncached(function, x, y, z)
+        }
+    }
+
     private fun pickFunction(
         router: NoiseRouter,
         type: NoiseType

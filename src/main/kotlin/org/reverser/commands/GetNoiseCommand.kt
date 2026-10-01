@@ -47,8 +47,10 @@ object GetNoiseCommand {
     private fun radiusAndTypeBranch(seedExtractor: (CommandContext<CommandSourceStack>, Unit) -> Long): RequiredArgumentBuilder<CommandSourceStack, Identifier> {
 
         return Commands.argument("dimension", DimensionArgument.dimension())
-            .then(Commands.argument("radius", IntegerArgumentType.integer(1, 50_000))
-                    .then(Commands.argument("type", StringArgumentType.word())
+            .then(
+                Commands.argument("radius", IntegerArgumentType.integer(1, 50_000))
+                    .then(
+                        Commands.argument("type", StringArgumentType.word())
                             .suggests { _, builder ->
                                 for (type in NoiseType.suggestionList()) {
                                     builder.suggest(type)
@@ -67,13 +69,19 @@ object GetNoiseCommand {
                                     return@executes 0
                                 }
 
-                                ctx.source.sendSuccess({ Component.literal("Collecting noise data (seed=$seed, radius=$radius, type=$type)...") },false)
+                                ctx.source.sendSuccess(
+                                    { Component.literal("Collecting noise data (seed=$seed, radius=$radius, type=$type)...") },
+                                    false
+                                )
 
                                 val server = ctx.source.server
                                 val outFile = Noise.collect(server, dimensionKey, seed, radius, type)
 
                                 if (outFile != null) {
-                                    ctx.source.sendSuccess({ Component.literal("Saved to ${outFile.absolutePath}") },false)
+                                    ctx.source.sendSuccess(
+                                        { Component.literal("Saved to ${outFile.absolutePath}") },
+                                        false
+                                    )
                                     1
                                 } else {
                                     ctx.source.sendFailure(Component.literal("Collection file is null."))
@@ -83,4 +91,4 @@ object GetNoiseCommand {
                     )
             )
     }
-    }
+}

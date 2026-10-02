@@ -16,6 +16,7 @@ import kotlin.random.Random
 
 object IsPeriodicCommand {
     private const val MAX_SAMPLES = 1_000_000
+    private const val MIN_REPETITIONS = 3
 
     /**
      * Command:
@@ -75,31 +76,48 @@ object IsPeriodicCommand {
                         return@executes 0
                     }
 
-                    val firstOccurrence = HashMap<Float, Int>()
+                    val samples = IntArray(MAX_SAMPLES)
                     for (x in 0 until MAX_SAMPLES) {
-                        val value = sampler(x, 0, 0)
-                        val previousX = firstOccurrence.putIfAbsent(value, x)
+                        samples[x] = sampler(x, 0, 0).toBits()
+                    }
 
-                        if (previousX != null) {
-                            val repeatDistance = x - previousX
-                            ctx.source.sendSuccess(
-                                {
-                                    Component.literal(
-                                        "Found repeated value at x=$previousX and x=$x " +
-                                            "(distance=$repeatDistance)"
-                                    )
-                                },
-                                false
-                            )
-                            return@executes 1
-                        }
+                    val period = findPeriod(samples, MIN_REPETITIONS)
+                    if (period != null) {
+                        ctx.source.sendSuccess(
+                            {
+                                Component.literal("Verified period=$period over x=0..${MAX_SAMPLES - 1} " + "(${MAX_SAMPLES / period} complete repetitions).")
+                            },
+                            false
+                        )
+                        return@executes 1
                     }
 
                     ctx.source.sendFailure(
-                        Component.literal("No repeated value found in the first $MAX_SAMPLES samples.")
+                        Component.literal("No period with at least $MIN_REPETITIONS complete repetitions " + "was found in x=0..${MAX_SAMPLES - 1}.")
                     )
                     return@executes 0
                 }
             )
+    }
+
+    private fun findPeriod(values: IntArray, minRepetitions: Int): Int? {
+        if (values.isEmpty() || minRepetitions < 2) return null
+
+        val prefix = IntArray(values.size)
+        for (i in 1 until values.size) {
+            var matched = prefix[i - 1]
+            while (matched > 0 && values[i] != values[matched]) {
+                matched = prefix[matched - 1]
+            }
+            if (values[i] == values[matched]) {
+                matched++
+            }
+            prefix[i] = matched
+        }
+
+        val period = values.size - prefix.last()
+        return period.takeIf {
+            it < values.size && it.toLong() * minRepetitions <= values.size.toLong()
+        }
     }
 }

@@ -11,6 +11,8 @@ Reverser is a Minecraft Fabric mod that is made to help reverse engineer world g
 ## Basic commands
 - `getnoise random <dimension> <radius> <type>` gets noise (from type argument) from random seed in entered radius
 - `getnoise <seed> <dimension> <radius> <type>` gets noise (from type argument) from set seed in entered radius
+- `isperiodic random <dimension> <type>` tells, if the noise is periodic or not by random seed
+- `isperiodic <seed> <dimension> <type>` tells, if the noise is periodic or not by set seed
 
 ## Use this mod
 1. Download [Fabric server](https://fabricmc.net/use/server/) with your Minecraft version and Fabric loader.

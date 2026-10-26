@@ -6,7 +6,7 @@ Reverser is a Minecraft Fabric mod that is made to help reverse engineer world g
 ## Versions
 | Mc Version  | Mod version | Fabric loader | Fabric API
 |-|-|-|-|
-| 26.3 | 0.1.4 | >= 0.19.5 | 0.161.0+26.3
+| 26.3 | 0.1.4 | >= 0.19.5 | >=0.160.6+26.3
 
 ## Basic commands
 - `getnoise random <dimension> <radius> <type>` gets noise (from type argument) from random seed in entered radius
@@ -24,4 +24,8 @@ Reverser is a Minecraft Fabric mod that is made to help reverse engineer world g
 ## Building from source
 1. Clone this repository
 2. Run `./gradlew build`
-3. You should find your mod in `build/libs/`
+3. Find the mod JARs in `versions/<minecraft-version>/build/libs/`, named
+   `Reverser-mc<minecraft-version>-<mod-version>.jar`.
+
+Build only one version with `./gradlew :26.3:build` (or start its server with
+`./gradlew :26.3:runServer`).

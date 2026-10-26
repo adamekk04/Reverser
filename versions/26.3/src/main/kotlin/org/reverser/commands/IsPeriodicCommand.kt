@@ -12,6 +12,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.resources.Identifier
 import org.reverser.enums.NoiseType
 import org.reverser.noise.Noise
+import org.reverser.noise.Periodicity
 import kotlin.random.Random
 
 object IsPeriodicCommand {
@@ -81,7 +82,7 @@ object IsPeriodicCommand {
                         samples[x] = sampler(x, 0, 0).toBits()
                     }
 
-                    val period = findPeriod(samples, MIN_REPETITIONS)
+                    val period = Periodicity.findPeriod(samples, MIN_REPETITIONS)
                     if (period != null) {
                         ctx.source.sendSuccess(
                             {
@@ -98,26 +99,5 @@ object IsPeriodicCommand {
                     return@executes 0
                 }
             )
-    }
-
-    private fun findPeriod(values: IntArray, minRepetitions: Int): Int? {
-        if (values.isEmpty() || minRepetitions < 2) return null
-
-        val prefix = IntArray(values.size)
-        for (i in 1 until values.size) {
-            var matched = prefix[i - 1]
-            while (matched > 0 && values[i] != values[matched]) {
-                matched = prefix[matched - 1]
-            }
-            if (values[i] == values[matched]) {
-                matched++
-            }
-            prefix[i] = matched
-        }
-
-        val period = values.size - prefix.last()
-        return period.takeIf {
-            it < values.size && it.toLong() * minRepetitions <= values.size.toLong()
-        }
     }
 }

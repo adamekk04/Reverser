@@ -1,7 +1,7 @@
 plugins {
     base
     kotlin("jvm") version "2.4.20" apply false
-    id("net.fabricmc.fabric-loom") version "1.18-SNAPSHOT" apply false
+    id("net.fabricmc.fabric-loom") version "1.19.4" apply false
 }
 
 allprojects {
